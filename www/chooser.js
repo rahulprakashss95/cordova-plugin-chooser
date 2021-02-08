@@ -44,6 +44,7 @@ function from_base64 (sBase64, nBlocksSize) {
 
 function getFileInternal (
 	accept,
+	size,
 	includeData,
 	successCallback,
 	failureCallback
@@ -92,6 +93,7 @@ function getFileInternal (
 				(typeof accept === 'string' ?
 					accept.toLowerCase().replace(/\s/g, '') :
 					undefined) || '*/*',
+				size,
 				includeData
 			]
 		);
@@ -108,10 +110,10 @@ function getFileInternal (
 }
 
 module.exports = {
-	getFile: function (accept, successCallback, failureCallback) {
-		return getFileInternal(accept, true, successCallback, failureCallback);
+	getFile: function (accept, size, successCallback, failureCallback) {
+		return getFileInternal(accept, size, true, successCallback, failureCallback);
 	},
 	getFileMetadata: function (accept, successCallback, failureCallback) {
-		return getFileInternal(accept, false, successCallback, failureCallback);
+		return getFileInternal(accept, size, false, successCallback, failureCallback);
 	}
 };

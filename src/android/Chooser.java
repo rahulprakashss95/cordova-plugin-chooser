@@ -59,8 +59,9 @@ public class Chooser extends CordovaPlugin {
 
 	private CallbackContext callback;
 	private Boolean includeData;
+	private String size;
 
-	public void chooseFile (CallbackContext callbackContext, String accept, Boolean includeData) {
+	public void chooseFile (CallbackContext callbackContext, String accept, String size, Boolean includeData) {
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 		intent.setType("*/*");
 		if (!accept.equals("*/*")) {
@@ -70,6 +71,7 @@ public class Chooser extends CordovaPlugin {
 		intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
 		intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 		this.includeData = includeData;
+		this.size = size;
 
 		Intent chooser = Intent.createChooser(intent, "Select File");
 		cordova.startActivityForResult(this, chooser, Chooser.PICK_FILE_REQUEST);
@@ -87,6 +89,7 @@ public class Chooser extends CordovaPlugin {
 		CallbackContext callbackContext
 	) {
 		try {
+			System.out.println("ArgsConsole", args);
 			if (action.equals(Chooser.ACTION_OPEN)) {
 				this.chooseFile(callbackContext, args.getString(0), args.getBoolean(1));
 				return true;
@@ -118,19 +121,20 @@ public class Chooser extends CordovaPlugin {
 							mediaType = "application/octet-stream";
 						}
 
-						String base64 = "";
+						// String base64 = "";
 
-						if (this.includeData) {
+						// if (this.includeData) {
 							byte[] bytes = Chooser.getBytesFromInputStream(
 								contentResolver.openInputStream(uri)
 							);
 
-							base64 = Base64.encodeToString(bytes, Base64.DEFAULT);
-						}
+						// 	base64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+						// }
 
 						JSONObject result = new JSONObject();
 
-						result.put("data", base64);
+						result.put("author", "Rahul");
+						result.put("data", bytes);
 						result.put("mediaType", mediaType);
 						result.put("name", name);
 						result.put("uri", uri.toString());
