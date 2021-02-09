@@ -89,9 +89,8 @@ public class Chooser extends CordovaPlugin {
 		CallbackContext callbackContext
 	) {
 		try {
-			System.out.println("ArgsConsole", args);
 			if (action.equals(Chooser.ACTION_OPEN)) {
-				this.chooseFile(callbackContext, args.getString(0), args.getBoolean(1));
+				this.chooseFile(callbackContext, args.getString(0), args.getString(1), args.getBoolean(2));
 				return true;
 			}
 		}
@@ -121,20 +120,22 @@ public class Chooser extends CordovaPlugin {
 							mediaType = "application/octet-stream";
 						}
 
-						// String base64 = "";
+						String base64 = "";
+						JSONObject result = new JSONObject();
 
-						// if (this.includeData) {
+						if (this.includeData) {
 							byte[] bytes = Chooser.getBytesFromInputStream(
 								contentResolver.openInputStream(uri)
 							);
-
-						// 	base64 = Base64.encodeToString(bytes, Base64.DEFAULT);
-						// }
-
-						JSONObject result = new JSONObject();
+							double maxSize = Double.parseDouble(this.size);
+							result.put("size", bytes.length);
+							if(maxSize >= bytes.length) {
+								base64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+							}
+						}
 
 						result.put("author", "Rahul");
-						result.put("data", bytes);
+						result.put("data", base64);
 						result.put("mediaType", mediaType);
 						result.put("name", name);
 						result.put("uri", uri.toString());
