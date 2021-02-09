@@ -134,7 +134,6 @@ public class Chooser extends CordovaPlugin {
 							}
 						}
 
-						result.put("author", "Rahul");
 						result.put("data", base64);
 						result.put("mediaType", mediaType);
 						result.put("name", name);
